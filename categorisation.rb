@@ -1,8 +1,11 @@
+# encoding: ISO-8859-1
+
 require "csv"
 
 RULES_RASHODI = {
 	'Gotovina' => [
-		/^Isplata got. ATM./		
+		/^Isplata got. ATM./,
+		/Šalter isplata/
 	],
 	'Hrana i kucne potrepstine' => [
 		/Kupovina VISA karticom - MERCATOR\b/,
@@ -29,7 +32,11 @@ RULES_RASHODI = {
 		/HOSE KOMERC DOO/,
 		/LIDLHRVATSKA/,
 		/TOMMY\b/,
-		/OKTUM DOO/
+		/OKTUM DOO/,
+		/AMKO KOMERC DOO/,
+		/MUJANIC MESNICA/,
+		/TARGET/,
+		/TISAK/
 	],
 	'Djecije stvari' => [
 		/KENN ART/,
@@ -41,7 +48,11 @@ RULES_RASHODI = {
 		/BIMACO DOO/,
 		/ZOE DRUSTVO/,
 		/KAVAT D\.O\.O\./,
-		/REM PRODUCT/
+		/REM PRODUCT/,
+		/KEPROM D\.O\.O\. AKSA/,
+		/DEXY CO KIDS DOO/,
+		/EUROM DENIS/,
+		/SOLIDEX DOO/
 	],
 	'Edukacija' => [
 		/BUY BOOK DOO SARAJEVO/,
@@ -52,7 +63,12 @@ RULES_RASHODI = {
 		/MLADINSKA KNJIGA/,
 		/SARAJEVO\-PUBLISHING/,
 		/Audible\b/,
-		/KNJIZARA\b/
+		/KNJIZARA\b/,
+		/SKOLARINA/,
+		/KANTINA/,
+		/UPISNINA/,
+		/BOOKDEPOSITORY.COM/,
+		/PBZ6MUZEJILUZIJA/
 	],
 	'Automobil' => [
 		/MAKBEL GUMA/,
@@ -77,7 +93,16 @@ RULES_RASHODI = {
 		/GVB VOERTUIG/,
 		/WIENER LINIEN/,
 		/BRKIC PETROL/,
-		/BENZINSKA\b/
+		/BENZINSKA\b/,
+		/HIFA-OIL/,
+		/HOLD INA BS/,
+		/GAGI TRANS DOO/,
+		/PETROL BH/,
+		/BP-TSANTERIDIS/,
+		/CAR HIRE FROM CARFLEXI/,
+		/O\.A\.s\.A AT/,
+		/BIHAC BIHAC/,
+		/OTES ILIDZA/
 	],
 	'Putovanja' => [
 		/NIEUW SLOTANIA HOTEL/,
@@ -90,7 +115,14 @@ RULES_RASHODI = {
 		/IBIS Wien/,
 		/SUN GARDENS/,
 		/CP Convenience Partner/,
-		/AERODROM/
+		/AERODROM/,
+		/AIRBNB/,
+		/Hotel on Booking/,
+		/B\.com/,
+		/BARCELO\.COM/,
+		/AEGEAN_WEB/,
+		/HYDRA BEACH/,
+		/CSC\*US EMBASSY/
 	],
 	'Odjeca' => [
 		/ZARA SARAJEVO/,
@@ -120,7 +152,19 @@ RULES_RASHODI = {
 		/SMC DOO OFFICE SHOES/,
 		/AGORA\-A DOO/,
 		/SPORT VISION/,
-		/DECHATLON\b/
+		/DECHATLON\b/,
+		/DEICHMANN/,
+		/C-A MODA/,
+		/PBZ7HMDOO/,
+		/H \& M HENNES \& MAURITZ/,
+		/PLANIKA FLEX/,
+		/ALMA RAS/,
+		/CORTIX/,
+		/AB\-LINE ORSAY/,
+		/CM\-COSMETIC/,
+		/KOTON TEXTIL/,
+		/GAP US/,
+		/MARSHALLS/
 	],
 	'Luksuz' => [
 		/DERMATOVEN CENTAR FARA/,
@@ -132,8 +176,19 @@ RULES_RASHODI = {
 		/HERBAL SPA/,
 		/PP\*\d/,
 		/ALIEXPRESS\.COM/,
+		/ALIEXPRESS/,
 		/ZLATARNA CELJE DOO/,
-		/Samsonite/
+		/Samsonite/,
+		/ZZR SOFIC/,
+		/NINTENDO/,
+		/GAMESTOP/,
+		/STYLOS D\.O\.O\./,
+		/DELTA AIR   Seat Fees/,
+		/IN \*GAMERS WORLD/,
+		/AMZN MKTP/i,
+		/BEST BUY/,
+		/Shop 2204\/ P\&C L2 Schipho/,
+		/Shop 4721\/ Centraal L2 Sc/
 	],
 	'Jelo vani' => [
 		/BERMUDA BRAEU WIEN/,
@@ -165,7 +220,20 @@ RULES_RASHODI = {
 		/LIDL\b/,
 		/METROPOLIS\b/,
 		/KFC\b/,
-		/CAMPUS BRAEU WIEN/
+		/CAMPUS BRAEU WIEN/,
+		/STARBUCKS/,
+		/KAFENIO/,
+		/GRAY FOX COFFEE/,
+		/SELECT CO CAFE/,
+		/SP TOPLIK/,
+		/PBZ7APETIT/,
+		/RESTORAN WOK/,
+		/Ginger Sushi/,
+		/SUNCE DOO BUSOVACA/,
+		/PINO NATURE/,
+		/RESTORAN VIDIKOVAC/,
+		/HMSHOST/,
+		/SSP NEDERLAND B.V./
 	],
 	'Opremanje kuce' => [
 		/OBI\b/,
@@ -182,7 +250,15 @@ RULES_RASHODI = {
 		/IMTEC DOO/,
 		/EGLO RASVJETA/,
 		/GRADIZ D\.O\.O\./,
-		/VITAPUR DOO/
+		/VITAPUR DOO/,
+		/IKEA/,
+		/ARCHITEKTENGRUPPE S71/,
+		/ELPI COMERC/,
+		/LAMPER/,
+		/ADAZAL/,
+		/FARB\-EX/,
+		/AT KERAMETAL/,
+		/R:769-P\/19/ 	#Ans Drive
 	],
 	'Zdravlje' => [
 		/APOTEKE\b/,
@@ -191,30 +267,62 @@ RULES_RASHODI = {
 		/ITALGROUP DOO/,
 		/PHARMACIA\b/,
 		/BEURER\b/,
-		/LJEKARNA\b/
+		/LJEKARNA\b/,
+		/PZU POLIKLINIKA EURO/
 	],
 	'Komunalije' => [
 		/RACUN\b/,
-		/BH TELECOM/
+		/BH TELECOM/,
+		/ODVOZ SMECA/,
+		/RAC\?UN ZA PRIRODNI GAS/,
+		/R:03-309115/,		# Sarajevogas
+		/R:40404-0819081/,	# 
+		/R:402-0514674/,
+		/R:RAC\?UN ZA UTROS\?ENU VODU/,
+		/R:650470570201909-01.09.2019 - 30.09.2019/
 	],
 	'Ban. naknade i kamate' => [
 		/NAKNADA ZA PODIZANJE GOTOVINE/,
-		/Dnevne transakcije po tek\.rn/,
 		/Provizija za nalog \d+/,
 		/Automatska naplata-stanovni/,
-		/Provizija za nalog 77640620/,
 		/Naknada Paket Premium/,
 		/VISA electron-obr/,
-		/Kamata-Teku/
+		/Kamata-Tekući račun/,
+		/NAKNADA ZA KORISTENJE SEFA/,
+		/Naknada za obnavu limita FL/
+	],
+	'Porezi i kazne' => [
+		/POREZ NA PROMET NEPOKRETNOSTI/,
+		/UPLATA NOVCANE KAZNE/
+	],
+	'Osiguranje' => [
+		/BROJ PONUDE N1183-566665/
+	],
+	'Kredit' => [
+		/Trajni nalog br. 63216/ # Rata kredita
 	],
 	'Izdrzavanje i pomoc' => [
 		/ZA RODITELJE/
 	],
 	'Donacije' => [
-		/R:09001623480-JEDNOKRATNA POMOC/
+		/R:09001623480-JEDNOKRATNA POMOC/,
+		/STIPENDIJA/,
+		/UPLATA DONACIJE/,
+		/UPLATA ZA SUFARE/
 	],
 	'Transfer' => [
-		/ELBA\b/
+		/PRENOS SREDSTAVA/,
+		/ELBA\b/,
+		/^UPLATA$/
+	],
+	'Pozajmice' => [
+		/UPLATA POZAJMICE/,
+		/POVRAT POZAJMNICE/
+	],
+	'Nepoznato' => [
+		/Dnevne transakcije po tek\.rn/,
+		/DOBRINJA D.D. SARAJEVO/,
+		/MIL EXPORT DOO N TRAVN NO/
 	]
 }
 
@@ -226,18 +334,27 @@ RULES_PRIHODI = {
 	],
 	'Dnevnice za poslovni put' => [
 		/SLUZBENI PUT/,
-		/PUTNA AKONTACIJA/
+		/PUTNA AKONTACIJA/,
+		/DNEVNICE SL\.PUT/
 	],
 	'Transfer' => [
 		/ELBA\b/,
-		/NA SBERBANK RACUN/
+		/NA SBERBANK RACUN/,
+		/PRENOS SREDSTAVA/,
+		/^UPLATA$/
+	],
+	'Pozajmice' => [
+		/POVRAT POZAJMNICE/,
+		/VRACANJE POZAJMICE/,
+		/POVRAT POZAJMICE/
 	],
 	'Isplata dobiti' => [
 		/DOBITI\b/	
 	],
+	'Kredit' => [
+		/Pustanja kredita/
+	]
 }
-
-
 
 def parse_rules(rules, rashod, date, opis, amount) 
 	rules.each do |rule_pair|
@@ -255,7 +372,7 @@ UNKNOWNS = []
 matches = 0
 no_matches = 0
 
-parsed_file = CSV.read("export-all.txt", { :col_sep => "\t" , quote_char: nil,  encoding: "ISO8859-1"})
+parsed_file = CSV.read("export-all.txt", { :col_sep => "\t" , encoding: "ISO8859-1"})
 
 CSV.open("output.txt", "w", { :col_sep => "\t" ,  encoding: "ISO8859-1"}) do |csv|
 
